@@ -1,6 +1,6 @@
 # Седмица 1 - Едносвързан и двусвързан списък
 
-Имплементация на едносвързан списък(https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/tree/main/Week01/SinglyLinkedList)
+[Имплементация на едносвързан списък](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/tree/main/Week01/SinglyLinkedList)
 
 ***Задача 1:***
 

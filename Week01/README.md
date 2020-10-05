@@ -1,5 +1,7 @@
 # Седмица 1 - Едносвързан и двусвързан списък
 
+Имплементация на едносвързан списък (https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/tree/main/Week01/SinglyLinkedList)
+
 ***Задача 1:***
 
 Чрез директно използване на възлите на едносвързан списък, да се дефинира функцията 
@@ -12,6 +14,7 @@ void swapSecond(Node*& first, int element) ,
 first: 1 -> 2 -> 3 -> 4 -> 5
 swapSecond(first,3): 1 -> 2 -> 5 -> 4 -> 3
 ```
+[Решение...](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/blob/main/Week01/Task1)
 
 ***Задача 2:***
 

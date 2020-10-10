@@ -56,4 +56,5 @@ SLinkList& SLinkList::operator=(const SLinkList& rhs)
 SLinkList::~SLinkList()
 {
 	this->clear();
+	this->first = nullptr;
 }

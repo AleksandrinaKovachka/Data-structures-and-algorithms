@@ -1,0 +1,76 @@
+#include <iostream>
+
+struct Node
+{
+	char data;
+	Node *next, *prev;
+
+	Node(char data, Node* prev = nullptr, Node* next = nullptr)
+	{
+		this->data = data;
+		this->prev = prev;
+		this->next = next;
+	}
+};
+
+void pushBack(Node*& first, char data)
+{
+	if (first == nullptr)
+	{
+		first = new Node(data);
+		return;
+	}
+
+	Node* cur = first;
+
+	while (cur->next != nullptr)
+	{
+		cur = cur->next;
+	}
+
+	Node* newNode = new Node(data, cur);
+	cur->next = newNode;
+}
+
+void removeFirstElement(Node*& first)
+{
+	Node* cur = first;
+	int count = 0;
+
+	while (cur->next != nullptr)
+	{
+		if (cur->next->data == cur->data)
+		{
+			++count;
+			if (count == 2)
+			{
+				Node* removeNode = new Node(cur->prev->data);
+				cur->prev->prev->next = cur;
+				cur->prev = cur->prev->prev;
+
+				delete removeNode;
+				count = 0;
+				continue;
+			}
+		}
+		cur = cur->next;
+	}
+}
+
+int main()
+{
+	Node* first = nullptr;
+
+	pushBack(first, '1');
+	pushBack(first, '2');
+	pushBack(first, '3');
+	pushBack(first, '3');
+  pushBack(first, '3');
+	pushBack(first, '4');
+
+	removeFirstElement(first);
+
+	print(first);
+
+	return 0;
+}

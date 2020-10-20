@@ -1,0 +1,117 @@
+#include <iostream>
+
+struct Node
+{
+	char data;
+	Node *next, *prev;
+
+	Node(char data, Node* prev = nullptr, Node* next = nullptr)
+	{
+		this->data = data;
+		this->prev = prev;
+		this->next = next;
+	}
+};
+
+void pushBack(Node*& first, char data)
+{
+	if (first == nullptr)
+	{
+		first = new Node(data);
+		return;
+	}
+
+	Node* cur = first;
+
+	while (cur->next != nullptr)
+	{
+		cur = cur->next;
+	}
+
+	Node* newNode = new Node(data, cur);
+	cur->next = newNode;
+}
+
+void mergeList(Node*& firstList, Node*& secondList)
+{
+	Node* cur = firstList;
+	Node* newNode = new Node('#');
+
+	while (cur->next != nullptr)
+	{
+		cur = cur->next;
+	}
+
+	cur->next = newNode;
+	newNode->prev = cur;
+	newNode->next = secondList;
+	secondList->prev = newNode;
+	secondList = nullptr;
+}
+
+bool haveDublicate(Node*& first)
+{
+	if (first == nullptr || first->next == nullptr)
+	{
+		return false;
+	}
+	
+	Node* cur = first;
+	Node* nextCur = nullptr;
+
+	while (cur->next != nullptr)
+	{
+		if (cur->data != '#')
+		{
+			cur = cur->next;
+		}
+
+		char element = cur->prev->data;
+		if (cur->next != nullptr && element == cur->next->data)
+		{
+			return true;
+		}
+
+		nextCur = cur->next;
+		while (nextCur->next != nullptr)
+		{
+			if (nextCur->data == '#' && nextCur->next != nullptr && nextCur->next->data == element)
+			{
+				return true;
+			}			
+			
+			nextCur = nextCur->next;
+		}
+
+		cur = cur->next;
+	}
+
+	return false;
+}
+
+
+int main()
+{
+	Node* first = nullptr;
+
+	pushBack(first, '6');
+	pushBack(first, '1');
+	pushBack(first, '5');
+	pushBack(first, '7');
+	pushBack(first, '4');
+
+	Node* second = nullptr;
+
+	pushBack(second, '4');
+	pushBack(second, '8');
+	pushBack(second, '9');
+	pushBack(second, '#');
+	pushBack(second, '9');
+	pushBack(second, '7');
+
+	mergeList(first, second);
+
+	std::cout << haveDublicate(first) << std::endl;
+
+	return 0;
+}

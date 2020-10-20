@@ -22,6 +22,8 @@
 Пример: T->H->I->N->K->#->S->M->I->L->E->#->O->L->D       Решение: False
 ```
 
+[Решение...](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/blob/main/Week02/Task1)
+
 Задача 2:
 =
 Чрез директно използване на възлите на двусвързан списък, при последователно повторение на три елемента в списъка, премахнете първия от поредицата повтарящи се.
@@ -36,6 +38,8 @@
 Решение: 1->2->3->3->4 
 ```
 
+[Решение...](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/blob/main/Week02/Task2)
+
 Задача 3:
 =
 Чрез директно използване на възлите на двусвързан списък, напишете функция, която обръща списъка в обратен ред и поставя на първо място сбора от числата на списъка.
@@ -46,3 +50,4 @@
 Решение: '6'->'3'->'2'->'1'
 ```
 
+[Решение...](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/blob/main/Week02/Task3)

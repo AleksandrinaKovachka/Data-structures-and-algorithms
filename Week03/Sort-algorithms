@@ -1,0 +1,144 @@
+#include <iostream>
+
+void bubbleSort(int arr[], size_t size)
+{
+	bool swapped;
+	int temp;
+
+	for (size_t i = 0; i < size - 1; ++i)
+	{
+		swapped = false;
+
+		for (size_t j = 0; j < size - i - 1; ++j)
+		{
+			if (arr[j] > arr[j + 1])
+			{
+				temp = arr[j];
+				arr[j] = arr[j + 1];
+				arr[j + 1] = temp;
+				swapped = true;
+			}
+		}
+
+		if (!swapped) break;
+	}
+}
+
+void selectionSort(int arr[], size_t size)
+{
+	int minIndex, temp;
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		minIndex = i;
+
+		for (size_t j = i + 1; j < size; ++j)
+		{
+			if (arr[j] < arr[minIndex])
+			{
+				minIndex = j;
+				temp = arr[j];
+				arr[j] = arr[j + 1];
+				arr[j + 1] = temp;
+			}
+		}
+	}
+}
+
+void insertionSort(int arr[], size_t size)
+{
+	int key, j;
+
+	for (size_t i = 1; i < size; ++i)
+	{
+		key = arr[i];
+		j = i - 1;
+
+		while (j >= 0 && arr[j] > key)
+		{
+			arr[j + 1] = arr[j];
+			j = j - 1;
+		}
+
+		arr[j + 1] = key;
+	}
+}
+
+
+//merge sort
+void split(Node*& head, Node*& first, Node*& second)
+{
+	Node* slow = head;
+	Node* fast = head->next;
+
+	while (fast != nullptr)
+	{
+		fast = fast->next;
+		if (fast != nullptr)
+		{
+			slow = slow->next;
+			fast = fast->next;
+		}
+	}
+
+	first = head;
+	second = slow->next;
+	slow->next = nullptr;
+}
+
+Node* merge(Node*& first, Node*& second)
+{
+	Node* result = nullptr;
+	while (first != nullptr && second != nullptr)
+	{
+		if (first->data < second->data)
+		{
+			pushBack(result, first->data);
+			first = first->next;
+		}
+		else
+		{
+			pushBack(result, second->data);
+			second = second->next;
+		}
+	}
+
+	while (first != nullptr)
+	{
+		pushBack(result, first->data);
+		first = first->next;
+	}
+
+	while (second != nullptr)
+	{
+		pushBack(result, second->data);
+		second = second->next;
+	}
+
+	return result;
+}
+
+void mergeSort(Node*& head)
+{
+	Node* current = head;
+	Node* first = nullptr;
+	Node* second = nullptr;
+
+	if (current == nullptr || current->next == nullptr)
+	{
+		return;
+	}
+
+	split(head, first, second);
+
+	mergeSort(first);
+	mergeSort(second);
+
+	head = merge(first, second);
+}
+
+int main()
+{
+
+	return 0;
+}

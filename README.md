@@ -4,3 +4,5 @@
 [Седмица 1](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/tree/main/Week01)
 
 [Седмица 2](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/tree/main/Week02)
+
+[Седмица 3](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/tree/main/Week03)

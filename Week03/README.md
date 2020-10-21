@@ -1,6 +1,8 @@
 # Седмица 3 - Алгоритми за сортиране
 
-Теория
+[Теория за алгоритмите за сортиране](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/tree/main/Week03/Sort-algorithms-theory)
+
+[Имплементация на алгоритмите за сортиране](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/blob/main/Week03/Sort-algorithms)
 
 Бонус задачи
 =

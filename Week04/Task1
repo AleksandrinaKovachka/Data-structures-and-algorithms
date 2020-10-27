@@ -1,0 +1,85 @@
+#include <iostream>
+#include <string>
+#include "StackArray.h"
+
+bool isTrue(const std::string& brackets)
+{
+	Stack<char> stack;
+	size_t length = brackets.length();
+	for (size_t i = 0; i < length; ++i)
+	{
+		if (brackets[i] == '(' || brackets[i] == '{' || brackets[i] == '[')
+		{
+			stack.push(brackets[i]);
+		}
+		else if (brackets[i] == ')' || brackets[i] == '}' || brackets[i] == ']')
+		{
+			char temp = stack.top();
+			if (brackets[i] == ')' && temp == '(')
+			{
+				stack.pop();
+			}
+			else if (brackets[i] == ']' && temp == '[')
+			{
+				stack.pop();
+			}
+			else if (brackets[i] == '}' && temp == '{')
+			{
+				stack.pop();
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		return stack.isEmpty();
+	}
+}
+
+//2-ри начин
+bool checkIfOpenIsCorrect(char elementFromStack, char elementFromArray)
+{
+	switch (elementFromStack)
+	{
+	case '(': return elementFromArray == ')';
+	case '{': return elementFromArray == '}';
+	case '[': return elementFromArray == ']';
+	}
+
+	return false;
+}
+
+bool checkBrackets(const char* charArray, size_t length)
+{
+	Stack<char> stack;
+	for (size_t i = 0; i < length; ++i)
+	{
+		if (charArray[i] == '(' || charArray[i] == '{' || charArray[i] == '[')
+		{
+			stack.push(charArray[i]);
+		}
+		else if (charArray[i] == ')' || charArray[i] == '}' || charArray[i] == ']')
+		{
+			if (checkIfOpen(stack.top(), charArray[i]))
+			{
+				stack.pop();
+				continue;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	}
+
+	return stack.isEmpty();
+}
+
+int main()
+{
+	std::string stringArray = "{[(()[])]}";
+	std::cout << isTrue(stringArray);
+
+	return 0;
+}

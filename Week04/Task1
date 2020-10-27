@@ -11,9 +11,14 @@ bool isTrue(const std::string& brackets)
 		if (brackets[i] == '(' || brackets[i] == '{' || brackets[i] == '[')
 		{
 			stack.push(brackets[i]);
+			continue;
 		}
-		else if (brackets[i] == ')' || brackets[i] == '}' || brackets[i] == ']')
+		if (brackets[i] == ')' || brackets[i] == '}' || brackets[i] == ']')
 		{
+			if (stack.isEmpty())
+			{
+				return false;
+			}
 			char temp = stack.top();
 			if (brackets[i] == ')' && temp == '(')
 			{
@@ -32,9 +37,8 @@ bool isTrue(const std::string& brackets)
 				return false;
 			}
 		}
-
-		return stack.isEmpty();
 	}
+	return stack.isEmpty();
 }
 
 //2-ри начин
@@ -61,7 +65,11 @@ bool checkBrackets(const char* charArray, size_t length)
 		}
 		else if (charArray[i] == ')' || charArray[i] == '}' || charArray[i] == ']')
 		{
-			if (checkIfOpen(stack.top(), charArray[i]))
+			if (stack.isEmpty())
+			{
+				return false;
+			}
+			if (checkIfOpenIsCorrect(stack.top(), charArray[i])) // if(stack.isEmpty() == false && checkIfOpenIsCorrect(stack.top(), charArray[i]))
 			{
 				stack.pop();
 				continue;
@@ -78,8 +86,11 @@ bool checkBrackets(const char* charArray, size_t length)
 
 int main()
 {
-	std::string stringArray = "{[(()[])]}";
-	std::cout << isTrue(stringArray);
+	char charArray[] = "{[(()[])]}}";
+	std::cout << checkBrackets(charArray, sizeof(charArray));
+
+	std::string arr = "(()()))";
+	std::cout << isTrue(arr)<<std::endl;
 
 	return 0;
 }

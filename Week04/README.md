@@ -4,6 +4,8 @@
 
 [Имплементация на стек със списък](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/blob/main/Week04/StackList.h)
 
+[Пример за работа с текстови и бинарни файлове](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/blob/main/Week04/Example-file)
+
 Задача 1:
 =
 Напишете функция, която проверява дали даден низ е правилно скобуван. В низа може да има скоби като: {}, [], ().

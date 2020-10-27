@@ -1,0 +1,97 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+
+//създаване на тестов файл
+void createTextFile(const std::string& stringInputToFile)
+{
+	std::ofstream fileOut("File.txt"); //името може да се подаде като аргумент на функцията
+
+	if (fileOut.is_open())
+	{
+		fileOut << stringInputToFile << std::endl; //поставя във файла stringInputToFile и премества указателя на нов ред
+		//могат да се добавят още редове във файла
+	}
+	else
+	{
+		std::cout << "Unable to open\n";
+	}
+
+	fileOut.close();
+}
+
+//взимане на ред от текстов файл
+const std::string getFromTextFile(const char* nameOfFile)
+{
+	std::string stringFromFile = "";
+	std::string line = "";
+	std::ifstream fileIn(nameOfFile);
+
+	if (fileIn.is_open())
+	{
+		while (std::getline(fileIn, line))
+		{
+			std::cout << line << std::endl;
+			stringFromFile = line;
+		}
+	}
+	else
+	{
+		std::cout << "Unable to open\n";
+	}
+
+	fileIn.close();
+
+	return stringFromFile; //ще върне само последния ред(ако във файла има повече от един ред)
+}
+
+//създаване на бинарен файл - тази функция няма да е същата при записване на стринг
+void createBinaryFile(int number)
+{
+	std::ofstream fileOut("File.bin", std::ios::binary);
+
+	if (fileOut.is_open())
+	{
+		fileOut.write((const char*)&number, sizeof(number));
+	}
+	else
+	{
+		std::cout << "Unable to open\n";
+	}
+
+	fileOut.close();
+}
+
+//прочитане на стойност от бинарен файл - тази функция няма да е същата при прочитане на стринг
+int getFromFile(const char* nameOfFile)
+{
+	int number = 0;
+	std::ifstream fileIn(nameOfFile, std::ios::binary);
+
+	if (fileIn.is_open())
+	{
+		fileIn.read((char*)&number, sizeof(number));
+	}
+	else
+	{
+		std::cout << "Unable to open\n";
+	}
+
+	fileIn.close();
+
+	return number;
+}
+
+int main()
+{
+  createTextFile("file test");
+	std::string text = getFromTextFile("File.txt");
+	std::cout << text << std::endl;
+
+	createBinaryFile(8);
+	int number = getFromFile("File.bin");
+	std::cout << number << std::endl;
+
+	return 0;
+}
+

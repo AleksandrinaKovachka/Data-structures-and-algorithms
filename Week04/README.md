@@ -4,6 +4,8 @@
 
 [Имплементация на стек със списък](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/blob/main/Week04/StackList.h)
 
+[Кратка теория за файлове](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/tree/main/Week04/Theory-file)
+
 [Пример за работа с текстови и бинарни файлове](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/blob/main/Week04/Example-file)
 
 Задача 1:

@@ -52,7 +52,7 @@ void createBinaryFile(int number)
 
 	if (fileOut.is_open())
 	{
-		fileOut.write((const char*)&number, sizeof(number));
+		fileOut.write((const char*)&number, sizeof(int));
 	}
 	else
 	{
@@ -70,7 +70,7 @@ int getFromFile(const char* nameOfFile)
 
 	if (fileIn.is_open())
 	{
-		fileIn.read((char*)&number, sizeof(number));
+		fileIn.read((char*)&number, sizeof(int));
 	}
 	else
 	{

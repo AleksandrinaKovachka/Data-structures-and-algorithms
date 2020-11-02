@@ -1,0 +1,186 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <stack>
+
+//функция, която връща размера на файла(размерът е сбора от размерностите на данните във файла, в битове)
+int getSizeOfFile(const char* nameOfFile) //използвайте const char* за имена на файлове
+{
+	std::ifstream file(nameOfFile); //отваря файла за четене
+	int begin = file.tellg(); //текущата позиция е в началото и затова в променливата запазваме началото
+	file.seekg(0, std::ios::end); //премества указателя в края на файла
+	int end = file.tellg(); //взима текущата позиция, която вече е в края
+	file.close();
+
+	return (end - begin); //връща разлика от края на файла с началото, което всъщност е размера на файла
+}
+
+//създаване на бинарен файл, в който ще може да се записва стринг
+void createBinaryFile(const std::string& text)
+{
+	std::ofstream fileOut("FileText.bin", std::ios::binary);
+	if (fileOut.is_open())
+	{
+		unsigned sizeOfString = text.length();
+		fileOut.write((const char*)&sizeOfString, sizeof(unsigned)); //първо във файла трябва да се запише колко е размера на стринга
+		fileOut.write(text.c_str(), sizeOfString); //след размера записваме стринга преобразуван в const char*
+	}
+	else
+	{
+		std::cout << "Unable to open\n";
+	}
+
+	fileOut.close();
+}
+
+//четене на бинарен файл, в който е записан стринг
+std::string getFromFile(const char* nameOfFile)
+{
+	std::string text = "";
+	std::ifstream fileIn(nameOfFile, std::ios::binary);
+
+	if (fileIn.is_open())
+	{
+		unsigned sizeOfString = 0;
+		fileIn.read((char*)&sizeOfString, sizeof(unsigned)); //първо трябва да взема размера на стринга, размера ми се пази във файла преди стринга в променлива от тип unsigned
+		char* buffer = new char[sizeOfString + 1]; //в буфер временно ще поставя стринга от файла, във файла стринга ми е от тип const char*
+		fileIn.read(buffer, sizeOfString);
+		text.append(buffer, sizeOfString); //на променливата от тип стринг и присвоявам буфера
+		delete[] buffer;
+	}
+	else
+	{
+		std::cout << "Unable to open\n";
+	}
+
+	fileIn.close();
+
+	return text;
+}
+
+int getSum(const std::string& expression) //предварително трябва да се провери дали въведения израз е коректно скобуван (задача 1, седмица 4)
+{
+	std::stack<int> stackInt; //ще запазва само числата
+	std::stack<char> stackChar; //ще запазва скобите и операциите
+	unsigned size = expression.length();
+	int number = 0, firstNumber = 0, secondNumber = 0;
+	char operation;
+
+	for (unsigned i = 0; i < size; ++i)
+	{
+		if (expression[i] >= '0' && expression[i] <= '9') //числото може да е многоцифрено, затова трябва да се вземат всички цифри
+		{
+			number = expression[i] - '0';
+			while (expression[i + 1] >= '0' && expression[i + 1] <= '9')
+			{
+				number *= 10;
+				number += expression[i + 1] - '0';
+				++i;
+			}
+			//2ри начин
+			/*while (true)
+			{
+				++i;
+				if (expression[i] >= '0' && expression[i] <= '9')
+				{
+					number *= 10;
+					number += expression[i] - '0';
+				}
+				else
+				{
+					--i;
+					break;
+				}
+			}*/
+			stackInt.push(number);
+			number = 0;
+		}
+		else if (expression[i] == '(' || expression[i] == '+' || expression[i] == '-' || expression[i] == '*' || expression[i] == '/')
+		{
+			stackChar.push(expression[i]);
+		}
+		else if (expression[i] == ')')
+		{
+			if (!stackInt.empty() && !stackChar.empty())
+			{
+				secondNumber = stackInt.top(); //взима най-горното число
+				stackInt.pop();
+				operation = stackChar.top();//взима операцията
+				stackChar.pop(); //премахва операцията
+				stackChar.pop(); //премахва отварящата скоба
+				//не може да се предвиди случая ако в израза има отрицателно число ((-15) + 7*(3 + 1)), винаги ще търси второто число към операцията
+				firstNumber = stackInt.top();
+				stackInt.pop();
+
+				switch (operation)
+				{
+				case '+': stackInt.push(firstNumber + secondNumber); break;
+				case '-': stackInt.push(firstNumber - secondNumber); break;
+				case '*': stackInt.push(firstNumber * secondNumber); break;
+				case '/': 
+					if (secondNumber == 0)
+					{
+						std::cout << "Wrong number 0\n";
+						return -1;
+					}
+					stackInt.push(firstNumber / secondNumber); break;
+				}
+			}
+		}
+		//ако срещне някъде друг символ, който не е проверен във if else операторите, то ще го пропусне и ще премине към следващ елемент от стринга
+	}
+
+	return stackInt.top(); //по този начин само показвам най-горния елемент от стека, но не го изтривам (можете да си създадете променлива, в която да запазите стойността връщана от top и да премахнете с pop елемента, в момента аз разчитам, че деструктора ще освободи паметта)
+}
+
+void replaceFile(std::string& expression, const int& result)
+{
+	expression.append(" = ");
+	expression.append(std::to_string(result));
+
+	createBinaryFile(expression); //използвам същата функция, тъй отварянето във файла не е с флаг app(допълване), старата стойност във файла ще се замени с новата
+}
+
+//функция, която взима част от файл като ни е подадена позицията, откъдето започва тази част
+std::string resultFromFile(unsigned position) //в тази задача позицията я изчисляваме ръчно, искам само да покажа как може да вземем част от стринг във файл на дадена позиция
+{
+	unsigned howElemetsToRead = getSizeOfFile("FileText.bin") - position; //в променливата ми се пази броя на символите, които искам да взема от файла
+	std::ifstream file("FileText.bin", std::ios::binary);
+	char* buffer = new char[howElemetsToRead + 1]; //в този буфер ще поставим частта, която ни интересува
+	if (file.is_open())
+	{
+		//преди използването на seekg указателя се намира в началото на файла, премествам го толкова позиции, започвайки от началото, колкото е подадената стойност на функцията
+		file.seekg(position, std::ios::beg); //указателя се намира на позицията, от която искаме да прочетем
+		file.read(buffer, howElemetsToRead); //записваме в буфера, толкова символи, колкото променливата howElemetsToRead ни казва да прочетем от файла
+		file.close();
+	}
+
+	std::string result;
+	result.append(buffer, howElemetsToRead);
+	delete[] buffer;
+
+	return result; //в променливата result се намира резултата от израза 
+}
+
+int main()
+{
+	std::string text = "(712034 + (2 * (3 + 4)))";
+	createBinaryFile(text);
+
+	text = getFromFile("FileText.bin");
+	std::cout << "Text from file: " << text << std::endl;
+
+	int result = getSum(text);
+
+	std::cout << "Result: " << result << std::endl;
+
+	replaceFile(text, result);
+	text = getFromFile("FileText.bin");
+	std::cout << "Replace text: " << text << std::endl;
+
+	std::cout << "Size of file: " << getSizeOfFile("FileText.bin") <<std::endl;
+	text = resultFromFile(31); //предварително съм пресметнала от коя позиция започва резултата във файла, има начини да се запази тази стойност(стек, файл...)
+	std::cout << "Result from file: " << text << std::endl;
+
+	return 0;
+}

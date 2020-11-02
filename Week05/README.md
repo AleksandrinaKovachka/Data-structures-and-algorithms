@@ -13,6 +13,7 @@
 
 Изход: 31
 ```
+[Решение...](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/blob/main/Week05/Task1)
 
 Задача 2:
 =

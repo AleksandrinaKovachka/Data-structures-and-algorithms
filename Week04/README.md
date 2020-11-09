@@ -55,4 +55,5 @@
 
 Изход: ABCDDDDDDBCDDDDDD
 ```
+[Решение...](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/blob/main/Week04/Task3)
 

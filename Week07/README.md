@@ -1,5 +1,5 @@
 # Седмица 7 - Масиви
 
-Теория
+[Теория](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/tree/main/Week07/Theory)
 
-Задачи
+[Задачи](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/tree/main/Week07/Tasks)

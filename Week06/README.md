@@ -1,5 +1,7 @@
 # Седмица 6 - Двоични дървета
 
+[Решения на задачите](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/blob/main/Week06/Tasks)
+
 Задача 1:
 =
 Напише функция, която добавя елемент в двоично наредено дърво.

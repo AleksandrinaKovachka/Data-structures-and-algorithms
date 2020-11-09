@@ -1,0 +1,273 @@
+#include "pch.h"
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <stack>
+
+const int BUFFER_SIZE = 256;
+
+int ifHaveDigit(const std::string& stringList, int index, const char* nameOfUncompressedFile);
+int moreThanOneDigit(const std::string& stringList, int index, std::stack<int>& stackForInt);
+void repeatList(std::stack<int>& stackForInt, const char* nameOfUncompressedFile);
+void inputFromFile(const char* nameOfCompressedFile, const char* nameOfUnompressedFile);
+void addCharToFile(const char *nameOfFile, const char& element);
+int getSizeOfFile(const char *nameOfFile);
+
+void returnList(const std::string& stringList, const char* nameOfUncompressedFile)
+{
+	//check if currect
+	int lengthOfString = stringList.length();
+	for (int i = 0; i < lengthOfString; ++i)
+	{
+		if (stringList[i] >= '1' && stringList[i] <= '9')
+		{
+			i = ifHaveDigit(stringList, i, nameOfUncompressedFile);
+			continue;
+		}
+		else
+		{
+			addCharToFile(nameOfUncompressedFile, stringList[i]);
+		}
+	}
+}
+
+int ifHaveDigit(const std::string& stringList, int index, const char* nameOfUncompressedFile)
+{
+	std::stack<int> stackForInt;
+
+	int lengthOfString = stringList.length();
+	int i = index;
+	for (i; i < lengthOfString; ++i)
+	{
+		if (stringList[i] >= '1' && stringList[i] <= '9')
+		{
+			stackForInt.push(stringList[i] - '0');
+			i = moreThanOneDigit(stringList, i, stackForInt);
+			if (stringList[i] == '(')
+			{
+				int sizeOfFile = getSizeOfFile(nameOfUncompressedFile);
+				stackForInt.push(sizeOfFile);
+				continue;
+			}
+			else
+			{
+				std::cout << "Wrong input\n";
+				stackForInt.pop();
+				break;
+			}
+		}
+		else
+		{
+			if (stringList[i] != ')')
+			{
+				addCharToFile(nameOfUncompressedFile, stringList[i]);
+			}
+			else
+			{
+				repeatList(stackForInt, nameOfUncompressedFile);
+			}
+
+		}
+	}
+
+	return i;
+}
+
+int moreThanOneDigit(const std::string& stringList, int index, std::stack<int>& stackForInt)
+{
+	int lengthOfString = stringList.length();
+	for (int i = index + 1; i < lengthOfString; ++i)
+	{
+		if (stringList[i] >= '1' && stringList[i] <= '9')
+		{
+			int tempNumber = stackForInt.top() * 10 + stringList[i] - '0';
+			stackForInt.pop();
+			stackForInt.push(tempNumber);
+		}
+		else if (stringList[i] == '0')
+		{
+			int tempNumber = stackForInt.top() * 10;
+			stackForInt.pop();
+			stackForInt.push(tempNumber);
+		}
+		else
+		{
+			return i;
+		}
+	}
+}
+
+void repeatList(std::stack<int>& stackForInt, const char* nameOfUncompressedFile)
+{
+	char buffer[BUFFER_SIZE];
+	int indexToWrite = stackForInt.top();
+	stackForInt.pop();
+	int timesToWrite = stackForInt.top() - 1;
+	stackForInt.pop();
+	int howElementsToWrite = getSizeOfFile(nameOfUncompressedFile) - indexToWrite;
+	if (BUFFER_SIZE > howElementsToWrite)
+	{
+		std::ifstream fileWithUncompressed(nameOfUncompressedFile);
+		if (fileWithUncompressed.is_open())
+		{
+			fileWithUncompressed.seekg(indexToWrite, std::ios::beg);
+			fileWithUncompressed.read(buffer, howElementsToWrite);
+		}
+		else
+		{
+			std::cout << "Unable to open\n";
+		}
+		fileWithUncompressed.close();
+
+		std::ofstream writeToFile(nameOfUncompressedFile, std::ios::app);
+		if (writeToFile.is_open())
+		{
+			while (timesToWrite > 0)
+			{
+				writeToFile.write(buffer, howElementsToWrite);
+				--timesToWrite;
+			}
+		}
+		else
+		{
+			std::cout << "Unable to open\n";
+		}
+		writeToFile.close();
+	}
+	else
+	{
+		int timesToWriteElements = timesToWrite * howElementsToWrite;
+		while (timesToWriteElements > BUFFER_SIZE)
+		{
+			std::ifstream fileWithUncompressed(nameOfUncompressedFile);
+			if (fileWithUncompressed.is_open())
+			{
+				fileWithUncompressed.seekg(indexToWrite, std::ios::beg);
+				fileWithUncompressed.read(buffer, BUFFER_SIZE);
+				indexToWrite += BUFFER_SIZE;
+				timesToWriteElements -= BUFFER_SIZE;
+			}
+			else
+			{
+				std::cout << "Unable to open\n";
+			}
+			fileWithUncompressed.close();
+
+			std::ofstream writeToFile(nameOfUncompressedFile, std::ios::app);
+			if (writeToFile.is_open())
+			{
+				writeToFile.write(buffer, BUFFER_SIZE);
+			}
+			else
+			{
+				std::cout << "Unable to open\n";
+			}
+			writeToFile.close();
+		}
+
+		if (timesToWriteElements != 0)
+		{
+			std::ifstream fileWithUncompressed(nameOfUncompressedFile);
+			if (fileWithUncompressed.is_open())
+			{
+				fileWithUncompressed.seekg(indexToWrite, std::ios::beg);
+				fileWithUncompressed.read(buffer, timesToWriteElements);
+			}
+			else
+			{
+				std::cout << "Unable to open\n";
+			}
+			fileWithUncompressed.close();
+
+			std::ofstream writeToFile(nameOfUncompressedFile, std::ios::app);
+			if (writeToFile.is_open())
+			{
+				writeToFile.write(buffer, timesToWriteElements);
+			}
+			else
+			{
+				std::cout << "Unable to open\n";
+			}
+			writeToFile.close();
+		}
+	}
+
+}
+
+void inputFromFile(const char* nameOfCompressedFile, const char* nameOfUnompressedFile)
+{
+	std::string line;
+	std::ifstream fileWithCompressed(nameOfCompressedFile);
+	if (fileWithCompressed.is_open())
+	{
+		while (std::getline(fileWithCompressed, line))
+		{
+			returnList(line, nameOfUnompressedFile);
+		}
+	}
+	else
+	{
+		std::cout << "Unable to open\n";
+	}
+
+	fileWithCompressed.close();
+}
+
+void addCharToFile(const char *nameOfFile, const char& element)
+{
+	std::ofstream fileWithUncompressed(nameOfFile, std::ios::app);
+	if (fileWithUncompressed.is_open())
+	{
+		fileWithUncompressed << element;
+	}
+	else
+	{
+		std::cout << "Unable to open\n";
+	}
+
+	fileWithUncompressed.close();
+}
+
+int getSizeOfFile(const char *nameOfFile)
+{
+	std::ifstream inputSize(nameOfFile);
+	int begin = inputSize.tellg();
+	inputSize.seekg(0, std::ios::end);
+	int end = inputSize.tellg();
+	inputSize.close();
+
+	return (end - begin);
+}
+
+int main()
+{
+	std::ofstream fileOut("CompressedFile.txt");
+	if (fileOut.is_open())
+	{
+		fileOut << "A2(BC)35(D5(abc))";
+	}
+	else
+	{
+		std::cout << "Unable to open\n";
+	}
+
+	inputFromFile("CompressedFile.txt", "UncompressedFile.txt");
+
+	std::string line;
+	std::ifstream fileWithCompressed("UncompressedFile.txt");
+	if (fileWithCompressed.is_open())
+	{
+		while (std::getline(fileWithCompressed, line))
+		{
+			std::cout << line << std::endl;
+		}
+	}
+	else
+	{
+		std::cout << "Unable to open\n";
+	}
+
+	fileWithCompressed.close();
+	
+	return 0;
+}

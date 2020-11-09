@@ -1,0 +1,156 @@
+#include <iostream>
+#include <string>
+#include <stack>
+
+int getNumber(const std::string& tempNumber);
+
+std::string returnRPN(const std::string& inputString)
+{
+	unsigned size = inputString.length();
+	std::stack<char> stackOperator;
+	std::stack<std::string> numberForResult;
+	std::string result = "";
+	int number = 0;
+	std::string tempOperation = "";
+	std::string tempNumber = "";
+	int firstNumber = 0, secondNumber = 0;
+	bool resultOfOperation = false;
+
+	for (unsigned i = 0; i < size; ++i)
+	{
+		if (inputString[i] == '(')
+		{
+			stackOperator.push(inputString[i]);
+		}
+		else if (inputString[i] >= '0' && inputString[i] <= '9')
+		{
+			number = inputString[i] - '0';
+			while (inputString[i + 1] >= '0' && inputString[i + 1] <= '9')
+			{
+				number *= 10;
+				number += inputString[i + 1] - '0';
+				++i;
+			}
+			numberForResult.push(std::to_string(number));
+			number = 0;
+		}
+		else if (inputString[i] == '<' || inputString[i] == '>' || inputString[i] == '!')
+		{
+			if (inputString[i + 1] == '=')
+			{
+				inputString[i] == '<' ? numberForResult.push("<=") : numberForResult.push(">=");
+				++i;
+				continue;
+			}
+			tempOperation = inputString[i];
+			numberForResult.push(tempOperation);
+			tempOperation = "";
+		}
+		else if (inputString[i] == '&' || inputString[i] == '|' || inputString[i] == ')')
+		{
+			if (inputString[i] == ')' && stackOperator.top() == '(')
+			{
+				stackOperator.pop();
+				continue;
+			}
+
+			if (numberForResult.empty())
+			{
+				inputString[i] == '&' ? stackOperator.push('&') : stackOperator.push('|');
+				++i;
+				continue;
+			}
+
+			tempNumber = numberForResult.top();
+			numberForResult.pop();
+			if (numberForResult.empty())
+			{
+				result += "1";
+			}
+			else
+			{
+				secondNumber = getNumber(tempNumber);
+				tempOperation = numberForResult.top();
+				numberForResult.pop();
+				if (numberForResult.empty())
+				{
+					resultOfOperation = !firstNumber;
+					resultOfOperation == 1 ? result += "1" : result += "0";
+				}
+				else
+				{
+					tempNumber = numberForResult.top();
+					numberForResult.pop();
+					firstNumber = getNumber(tempNumber);
+
+					if (tempOperation == "<")
+					{
+						resultOfOperation = firstNumber < secondNumber;
+
+					}
+					else if (tempOperation == "<=")
+					{
+						resultOfOperation = firstNumber <= secondNumber;
+					}
+					else if (tempOperation == ">")
+					{
+						resultOfOperation = firstNumber > secondNumber;
+					}
+					else if (tempOperation == ">=")
+					{
+						resultOfOperation = firstNumber >= secondNumber;
+					}
+					else if (tempOperation == "==")
+					{
+						resultOfOperation = firstNumber == secondNumber;
+					}
+					resultOfOperation == 1 ? result += "1" : result += "0";
+				}
+			}
+
+			if (inputString[i] != ')')
+			{
+				stackOperator.push(inputString[i]);
+				++i;
+			}
+			else
+			{
+				result += stackOperator.top() == '&' ? "&&" : "||";
+				stackOperator.pop();
+				stackOperator.pop();
+			}
+		}
+	}
+
+	while (!stackOperator.empty())
+	{
+		result += stackOperator.top() == '&' ? "&&" : "||";
+		stackOperator.pop();
+	}
+
+	return result;
+}
+
+int getNumber(const std::string& tempNumber)
+{
+	int number = 0;
+	unsigned size = tempNumber.length();
+	for (int i = 0; i < size; ++i)
+	{
+		number += tempNumber[i] - '0';
+		number *= 10;
+	}
+
+	return (number / 10);
+}
+
+int main()
+{
+	std::string inputString = "((12 >= 2) && 15) || ((!15 || 17 > 5) && !5)";
+
+	inputString = returnRPN(inputString);
+
+	std::cout << inputString << std::endl;
+
+	return 0;
+}

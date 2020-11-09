@@ -1,0 +1,158 @@
+#include <iostream>
+
+struct Node
+{
+	int data;
+	Node *left, *right;
+
+	Node(int data, Node *left = nullptr, Node *right = nullptr)
+	{
+		this->data = data;
+		this->left = left;
+		this->right = right;
+	}
+};
+
+//task_1
+void pushInsert(const int& data, Node*& root)
+{
+	if (root == nullptr)
+	{
+		root = new Node(data);
+		return;
+	}
+	if (root->data > data)
+	{
+		pushInsert(data, root->left);
+	}
+	if (root->data <= data)
+	{
+		pushInsert(data, root->right);
+	}
+}
+
+//task_2
+void printLeaves(Node*& root)
+{
+	if (root == nullptr)
+	{
+		return;
+	}
+	if (root->left == nullptr && root->right == nullptr)
+	{
+		std::cout << root->data << ' ';
+		return;
+	}
+	printLeaves(root->left);
+	printLeaves(root->right);
+}
+
+//ляво, корен, дясно
+void printLKD(Node*& root)
+{
+	if (root == nullptr)
+	{
+		return;
+	}
+	printLKD(root->left);
+	std::cout << root->data << ' ';
+	printLKD(root->right);
+}
+
+//корен, ляво, дясно
+void printKLD(Node*& root)
+{
+	if (root == nullptr)
+	{
+		return;
+	}
+	std::cout << root->data << ' ';
+	printKLD(root->left);
+	printKLD(root->right);
+}
+
+//дясно, корен, ляво
+void printDKL(Node*& root)
+{
+	if (root == nullptr)
+	{
+		return;
+	}
+	printDKL(root->right);
+	std::cout << root->data << ' ';
+	printDKL(root->left);
+}
+
+//task_3
+bool findElement(Node*& root, int data)
+{
+	if (root == nullptr)
+	{
+		return false;
+	}
+	if (root->data == data)
+	{
+		return true;
+	}
+	if (root->data > data)
+	{
+		return findElement(root->left, data);
+	}
+	else
+	{
+		return findElement(root->right, data);
+	}
+}
+
+//task_4
+void addNumberToNodes(int number, Node*& root)
+{
+	if (root == nullptr)
+	{
+		return;
+	}
+	root->data += number;
+	addNumberToNodes(number, root->left);
+	addNumberToNodes(number, root->right);
+}
+
+int sizeOfTree(Node*& root)
+{
+	if (root == nullptr)
+	{
+		return 0;
+	}
+	return 1 + sizeOfTree(root->left) + sizeOfTree(root->right);
+}
+
+//task_5
+int sumOfPositiveNodes(Node*& root)
+{
+	if (root == nullptr)
+	{
+		return 0;
+	}
+	if (root->data > 0)
+	{
+		return root->data + sumOfPositiveNodes(root->left) + sumOfPositiveNodes(root->right);
+	}
+
+	return sumOfPositiveNodes(root->left);
+	return sumOfPositiveNodes(root->right);
+}
+
+int main()
+{
+	Node* root = nullptr;
+	pushInsert(6, root);
+	pushInsert(4, root);
+	pushInsert(19, root);
+	pushInsert(2, root);
+	pushInsert(5, root);
+	pushInsert(8, root);
+	pushInsert(21, root);
+
+	printLeaves(root);
+
+	return 0;
+}

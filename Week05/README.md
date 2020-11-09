@@ -24,6 +24,7 @@
 
 Изход: 11&&01||0&&||
 ```
+[Решение...](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/blob/main/Week05/Task2)
 
 Задача 3:
 =

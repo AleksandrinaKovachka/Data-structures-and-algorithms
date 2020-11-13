@@ -12,3 +12,5 @@
 [Седмица 5](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/tree/main/Week05)
 
 [Седмица 6](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/tree/main/Week06)
+
+[Подготовка за контролно 1](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/tree/main/Example-exam1)

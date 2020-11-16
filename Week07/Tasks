@@ -1,0 +1,185 @@
+#include <iostream>
+
+struct Node
+{
+	int data;
+	Node *left, *right;
+
+	Node(int data, Node* left = nullptr, Node* right = nullptr)
+	{
+		this->data = data; //(*this).data
+		this->left = left;
+		this->right = right;
+	}
+};
+
+void pushInBST(int data, Node*& root)
+{
+	if (root == nullptr)
+	{
+		root = new Node(data);
+		return;
+	}
+
+	if (root->data > data)
+	{
+		pushInBST(data, root->left);
+	}
+	if (root->data <= data)
+	{
+		pushInBST(data, root->right);
+	}
+}
+
+void deleteInBST(Node*& root, int data)
+{
+	if (root == nullptr)
+	{
+		return;
+	}
+	if (root->data > data)
+	{
+		deleteInBST(root->left, data);
+	}
+	else if (root->data < data)
+	{
+		deleteInBST(root->right, data);
+	}
+	else //root->data == data
+	{
+		if (root->left == nullptr && root->right == nullptr)
+		{
+			delete root;
+			root = nullptr;
+		}
+		else if (root->left != nullptr && root->right == nullptr)
+		{
+			Node* temp = root->left;
+			delete root;
+			root = temp;
+		}
+		else if (root->right != nullptr && root->left == nullptr)
+		{
+			Node* temp = root->right;
+			delete root;
+			root = temp;
+		}
+		else
+		{
+			Node* cur = root->right;
+			while (cur && cur->left)
+			{
+				cur = cur->left;
+			}
+
+			Node* temp = cur;
+			root->data = temp->data;
+			deleteInBST(root->right, temp->data);
+		}
+	}
+}
+
+void printLKD(Node*& root)
+{
+	if (root == nullptr)
+	{
+		return;
+	}
+	printLKD(root->left);
+	std::cout << root->data << ' ';
+	printLKD(root->right);
+}
+
+bool sameTree(Node*& rootFirst, Node*& rootSecond)
+{
+	if (rootFirst == nullptr && rootSecond == nullptr)
+	{
+		return true;
+	}
+	if (rootFirst == nullptr || rootSecond == nullptr)
+	{
+		return false;
+	}
+	sameTree(rootFirst->left, rootSecond->left);
+	sameTree(rootFirst->right, rootSecond->right);
+}
+
+Node* makeTreeByArray(int* arr, int l, int r)
+{
+	if (l >= r)
+	{
+		return nullptr;
+	}
+	int m = (l + r) / 2;
+	Node* newNode = new Node(arr[m]);
+	newNode->left = makeTreeByArray(arr, l, m);
+	newNode->right = makeTreeByArray(arr, m + 1, r);
+
+	return newNode;
+}
+
+int* makeArrayByTree(int* arr, Node*& root)
+{
+	if (root == nullptr)
+	{
+		return arr;
+	}
+	int* left = makeArrayByTree(arr, root->left);
+	left[0] = root->data;
+	return makeArrayByTree(left + 1, root->right);
+}
+
+const int sizeOfTree(Node*& root)
+{
+	if (root == nullptr)
+	{
+		return 0;
+	}
+	return 1 + sizeOfTree(root->left) + sizeOfTree(root->right);
+}
+
+int main()
+{
+	Node* root = nullptr;
+	pushInBST(5, root);
+	pushInBST(3, root);
+	pushInBST(2, root);
+	pushInBST(4, root);
+	pushInBST(7, root);
+	pushInBST(6, root);
+	pushInBST(8, root);
+
+	Node* root2 = nullptr;
+	pushInBST(5, root2);
+	pushInBST(3, root2);
+	pushInBST(2, root2);
+	pushInBST(4, root2);
+	pushInBST(7, root2);
+	pushInBST(6, root2);
+	pushInBST(8, root2);
+
+	//deleteInBST(root, 2);
+	//deleteInBST(root, 3);
+	//deleteInBST(root, 5);
+
+	//printLKD(root);
+
+	//std::cout << sameTree(root, root2) << std::endl;
+
+	//int arr[] = { 2, 3, 4, 5, 6, 7, 8 }; // [5[3[2[], 4[]], 7[6, 8]]]
+
+	//Node* root3 = makeTreeByArray(arr, 0, sizeof(arr) / sizeof(int));
+
+	//printLKD(root3);
+
+	int size = sizeOfTree(root);
+	int* arr = new int[size];
+	int* t = makeArrayByTree(arr, root);
+
+	for (size_t i = 0; i < size; i++)
+	{
+		std::cout << arr[i] << ' ';
+	}
+	
+	return 0;
+}

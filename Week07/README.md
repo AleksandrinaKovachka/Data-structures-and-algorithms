@@ -1,5 +1,7 @@
 # Седмица 7 - Двоични наредени дървета
 
+[Решения на задачите](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/blob/main/Week07/Tasks)
+
 Задача 1:
 =
 Напише функция, която изтрива елемент в двоично наредено дърво.

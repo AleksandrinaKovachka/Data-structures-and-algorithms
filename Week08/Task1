@@ -1,0 +1,109 @@
+#include <iostream>
+#include <stack>
+#include <string>
+
+struct Node
+{
+	int data;
+	Node *prev, *next;
+
+	Node(const int& data, Node* prev = nullptr, Node* next = nullptr)
+	{
+		this->data = data;
+		this->prev = prev;
+		this->next = next;
+	}
+};
+
+void pushFront(const int& data, Node*& head)
+{
+	Node* newNode = new Node(data);
+	if (head == nullptr)
+	{
+		head = newNode;
+	}
+	else
+	{
+		newNode->next = head;
+		head->prev = newNode;
+		head = newNode;
+	}
+}
+
+bool isPalindrom(Node*& head)
+{
+	if (head == nullptr)
+	{
+		return true;
+	}
+	else
+	{
+		Node* cur = head;
+		Node* curReverseNode = nullptr;
+		while (cur != nullptr)
+		{
+			pushFront(cur->data, curReverseNode);
+			cur = cur->next;
+		}
+
+		cur = head;
+		Node* curReversed = curReverseNode;
+		while (cur != nullptr)
+		{
+			if (cur->data != curReversed->data)
+			{
+				return false;
+			}
+			cur = cur->next;
+			curReversed = curReversed->next;
+		}
+
+		return true;
+	}
+}
+
+bool isPalindrom2(Node*& head)
+{
+	if (head == nullptr)
+	{
+		return true;
+	}
+	else
+	{
+		Node* last = head;
+		while (last->next != nullptr)
+		{
+			last = last->next;
+		}
+
+		Node* cur = head;
+		//1 -> 4 -> 5 -> 5 -> 4 -> 1
+		while (cur != last && last->next != cur)
+		{
+			if (cur->data != last->data)
+			{
+				return false;
+			}
+			cur = cur->next;
+			last = last->prev;
+		}
+
+		return true;
+	}
+}
+
+int main()
+{
+	Node* head = nullptr;
+	pushFront(1, head);
+	pushFront(4, head);
+	pushFront(5, head);
+	pushFront(5, head);
+	pushFront(4, head);
+	pushFront(7, head);
+
+	std::cout << isPalindrom(head) << std::endl;
+	std::cout << isPalindrom2(head) << std::endl;
+  
+  return 0;
+}

@@ -1,0 +1,57 @@
+#include <iostream>
+#include <stack>
+#include <string>
+
+void pushInParking(std::stack<std::string>& parking, std::stack<std::string>& tempStack);
+
+void removeCar(std::stack<std::string>& parking, const std::string& numberOfCar)
+{
+	std::stack<std::string> tempStack;
+	bool flag = false;
+
+	while (!parking.empty())
+	{
+		if (parking.top() != numberOfCar)
+		{
+			tempStack.push(parking.top());
+			parking.pop();
+		}
+		else
+		{
+			parking.pop();
+			pushInParking(parking, tempStack);
+		}
+	}
+
+	pushInParking(parking, tempStack);
+}
+
+void pushInParking(std::stack<std::string>& parking, std::stack<std::string>& tempStack)
+{
+	while (!tempStack.empty())
+	{
+		parking.push(tempStack.top());
+		tempStack.pop();
+	}
+}
+
+int main()
+{
+	std::stack<std::string> parking;
+	parking.push("CA1234KL");
+	parking.push("PK2714KL");
+	parking.push("TX4664KL");
+	parking.push("M5114BB");
+	parking.push("CB9978MH");
+	parking.push("PB1024CB");
+
+	removeCar(parking, "M5114BB");
+
+	while (!parking.empty())
+	{
+		std::cout << parking.top() << std::endl;
+		parking.pop();
+	}
+
+	return 0;
+}

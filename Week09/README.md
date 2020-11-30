@@ -13,6 +13,8 @@
                    5   6  7
                    
 ```
+[Решение...](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/blob/main/Week09/Task1)
+
 Задача 2:
 =
 Намерете:
@@ -29,6 +31,8 @@
 sum = 28
 have element 6
 ```
+[Решение...](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/blob/main/Week09/Task2)
+
 Задача 3:
 =
 Изведете стойностите на дърво с много наследници по:
@@ -45,3 +49,4 @@ have element 6
 1 2 3 5 6 4 7
 1 2 3 4 5 6 7
 ```
+[Решение...](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/blob/main/Week09/Task3)

@@ -1,0 +1,50 @@
+#include <iostream>
+#include <list>
+#include <string>
+
+struct Node
+{
+	int data;
+	std::list <Node*> children;
+
+	Node(int data = 0)
+	{
+		this->data = data;
+	}
+};
+
+//[1([2][3([5][6])][4([7])])]
+Node* makeTreeByString(Node*& root, const char*& str)
+{
+	int data = *str - '0';
+	root->data = data;
+	++str;
+	if (*str == '(')
+	{
+		++str;
+		while (*str != ')')
+		{
+			if (*str == '[')
+			{
+				Node* childTemp = new Node;
+				++str;
+				makeTreeByString(childTemp, str);
+				root->children.push_back(childTemp);
+			}
+			++str;
+		}
+		++str;
+	}
+
+	return root;
+}
+
+int main()
+{
+	std::string tree1 = "[1([2][3([5][6])][4([7])])]";
+	const char* str = tree1.c_str() + 1;
+	Node* root = new Node;
+	Node* tree = makeTreeByString(root, str);
+	
+	return 0;
+}

@@ -1,0 +1,59 @@
+#include <iostream>
+#include <list>
+#include <string>
+#include <queue>
+
+struct Node
+{
+	int data;
+	std::list <Node*> children;
+
+	Node(int data = 0)
+	{
+		this->data = data;
+	}
+};
+
+//[1([2][3([5][6])][4([7])])]
+//1 2 3 5 6 4 7
+void printDFS(Node*& root)
+{
+	if (root == nullptr)
+	{
+		return;
+	}
+	std::cout << root->data << ' ';
+	for (std::list<Node*>::iterator it = root->children.begin(); it != root->children.end(); ++it)
+	{
+		printDFS(*it);
+	}
+}
+
+//[1([2][3([5][6])][4([7])])]
+//1 2 3 4 5 6 7
+void printBFS(Node*& root)
+{
+	std::queue<Node*> q;
+	q.push(root);
+	while (!q.empty())
+	{
+		Node* front = q.front();
+		q.pop();
+		std::cout << front->data << ' ';
+		for (std::list<Node*>::iterator it = front->children.begin(); it != front->children.end(); ++it)
+		{
+			q.push(*it);
+		}
+	}
+}
+
+int main()
+{
+	printDFS(root);
+
+	std::cout << std::endl;
+
+	printBFS(root);
+	
+	return 0;
+}

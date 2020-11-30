@@ -1,0 +1,61 @@
+#include <iostream>
+#include <list>
+#include <string>
+
+struct Node
+{
+	int data;
+	std::list <Node*> children;
+
+	Node(int data = 0)
+	{
+		this->data = data;
+	}
+};
+
+//сумата от върховете на дърво с много наследници
+void sumOfNodes(Node*& root, int& sum)
+{
+	if (root == nullptr)
+	{
+		return;
+	}
+	sum += root->data;
+	for (std::list<Node*>::iterator it = root->children.begin(); it != root->children.end(); ++it)
+	{
+		sumOfNodes(*it, sum);
+	}
+}
+
+//дали даден елемент се съдържа в дърво с много наследници
+bool haveElement(Node*& root, int data)
+{
+	if (root == nullptr)
+	{
+		return false;
+	}
+	if (root->data == data)
+	{
+		return true;
+	}
+	for (std::list<Node*>::iterator it = root->children.begin(); it != root->children.end(); ++it)
+	{
+		if (haveElement(*it, data))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+int main()
+{
+	int sum = 0;
+	sumOfNodes(tree, sum);
+  
+	std::cout << sum << std::endl;
+
+	std::cout << haveElement(tree, 8) << std::endl;
+  
+	return 0;
+}

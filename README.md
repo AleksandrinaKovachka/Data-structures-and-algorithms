@@ -20,3 +20,5 @@
 [Подготовка за контролно 1](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/tree/main/Example-exam1)
 
 [Седмица 9](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/tree/main/Week09)
+
+[Седмица 10](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/tree/main/Week10)

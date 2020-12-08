@@ -1,0 +1,116 @@
+#include <iostream>
+#include <string>
+#include <list>
+
+struct Node
+{
+	int data;
+	std::list<Node*> children;
+
+	Node(int data = 0)
+	{
+		this->data = data;
+	}
+};
+
+Node* makeTreeByString(Node*& root, const char*& str)
+{
+	int data = *str - '0';
+	root->data = data;
+	++str;
+	if (*str == '(')
+	{
+		++str;
+		while (*str != ')')
+		{
+			if (*str == '[')
+			{
+				Node* childTemp = new Node;
+				++str;
+				makeTreeByString(childTemp, str);
+				root->children.push_back(childTemp);
+			}
+			++str;
+		}
+		++str;
+	}
+
+	return root;
+}
+
+//всичките му елементи са първите нечетни числа от 1 до броя на възлите - 1 3 5 7 9 
+void arrayInTree(Node*& root, int*& arr)
+{
+	if (root == nullptr)
+	{
+		return;
+	}
+
+	*arr = root->data;
+	++arr;
+	for (std::list<Node*>::iterator it = root->children.begin(); it != root->children.end(); ++it)
+	{
+		arrayInTree(*it, arr);
+	}
+}
+
+unsigned size(Node*& root)
+{
+	if (root == nullptr)
+	{
+		return 0;
+	}
+
+	unsigned s = 1;
+	for (std::list<Node*>::iterator it = root->children.begin(); it != root->children.end(); ++it)
+	{
+		s += size(*it);
+	}
+
+	return s;
+}
+
+//и дали абсолютната разлика между два възела е идентична(Разликите в дървото трябва да са различни, няма повторения)
+bool isTrue(Node*& root)
+{
+	unsigned s = size(root);
+	int* arr = new int[s];
+	helpIsTrue(root, arr);
+
+	for (unsigned i = 0; i < s - 1; ++i)
+	{
+		for (unsigned j = i + 1; j < s; ++j)
+		{
+			if (arr[i] == arr[j])
+			{
+				delete[] arr;
+				return false;
+			}
+		}
+	}
+
+	delete[] arr;
+	return true;
+}
+
+void helpIsTrue(Node*& root, int*& arr)
+{
+	if (root == nullptr)
+	{
+		return;
+	}
+
+	for (std::list<Node*>::iterator it = root->children.begin(); it != root->children.end(); ++it)
+	{
+		*arr = abs(root->data - (*it)->data);
+		++arr;
+		helpIsTrue(*it, arr);
+	}
+
+}
+
+int main()
+{
+
+	return 0;
+}

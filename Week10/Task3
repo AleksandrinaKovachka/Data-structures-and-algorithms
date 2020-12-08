@@ -39,18 +39,18 @@ Node* makeTreeByString(Node*& root, const char*& str)
 }
 
 //всичките му елементи са първите нечетни числа от 1 до броя на възлите - 1 3 5 7 9 
-void arrayInTree(Node*& root, int*& arr)
+void arrayInTree(Node*& root, int* arr, int& index)
 {
 	if (root == nullptr)
 	{
 		return;
 	}
 
-	*arr = root->data;
-	++arr;
+	arr[index++] = root->data;
+
 	for (std::list<Node*>::iterator it = root->children.begin(); it != root->children.end(); ++it)
 	{
-		arrayInTree(*it, arr);
+		arrayInTree(*it, arr, index);
 	}
 }
 
@@ -71,11 +71,13 @@ unsigned size(Node*& root)
 }
 
 //и дали абсолютната разлика между два възела е идентична(Разликите в дървото трябва да са различни, няма повторения)
+void helpIsTrue(Node*& root, int* arr, unsigned& index);
 bool isTrue(Node*& root)
 {
 	unsigned s = size(root);
 	int* arr = new int[s];
-	helpIsTrue(root, arr);
+	unsigned index = s - 1;
+	helpIsTrue(root, arr, index);
 
 	for (unsigned i = 0; i < s - 1; ++i)
 	{
@@ -93,7 +95,7 @@ bool isTrue(Node*& root)
 	return true;
 }
 
-void helpIsTrue(Node*& root, int*& arr)
+void helpIsTrue(Node*& root, int* arr, unsigned& index)
 {
 	if (root == nullptr)
 	{
@@ -102,15 +104,45 @@ void helpIsTrue(Node*& root, int*& arr)
 
 	for (std::list<Node*>::iterator it = root->children.begin(); it != root->children.end(); ++it)
 	{
-		*arr = abs(root->data - (*it)->data);
-		++arr;
-		helpIsTrue(*it, arr);
+		arr[index--] = abs(root->data - (*it)->data);
+		helpIsTrue(*it, arr, index);
 	}
 
 }
 
 int main()
 {
+	std::string treeString = "[1([3][5][7][9])]";
+	const char* str = treeString.c_str() + 1;
+	Node* root = new Node;
+	Node* tree = makeTreeByString(root, str);
+
+	unsigned s = size(tree);
+	int arr[100];
+	int index = 0;
+	arrayInTree(tree, arr, index);
+
+	int *arrWithOdd = new int[s];
+	int next = 1;
+
+	for (unsigned i = 0; i < s; i++)
+	{
+		arrWithOdd[i] = next;
+		next += 2;
+	}
+
+	bool allOdd = true;
+	for (unsigned i = 0; i < s; ++i)
+	{
+		if (arr[i] != arrWithOdd[i])
+		{
+			allOdd = false;
+			break;
+		}
+	}
+
+	std::cout << (isTrue(tree) && allOdd) << std::endl;
+
 
 	return 0;
 }

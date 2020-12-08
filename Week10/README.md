@@ -24,6 +24,7 @@
                       
 Изход: Yes
 ```
+[Решение...](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/blob/main/Week10/Task1)
 
 Задача 2:
 =
@@ -72,6 +73,7 @@
                       
 Изход: Yes
 ```
+[Решение...](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/blob/main/Week10/Task2)
 
 Задача 3:
 =
@@ -87,4 +89,4 @@
                       
 Изход: Yes
 ```
-
+[Решение...](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/blob/main/Week10/Task3)

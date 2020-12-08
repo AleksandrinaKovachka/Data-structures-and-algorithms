@@ -1,0 +1,127 @@
+#include <iostream>
+#include <string>
+
+struct Node
+{
+	int data;
+	Node* left;
+	Node* right;
+
+	Node(const int& data, Node* left = nullptr, Node* right = nullptr)
+	{
+		this->data = data;
+		this->left = left;
+		this->right = right;
+	}
+};
+
+void pushInBST(int data, Node*& root)
+{
+	if (root == nullptr)
+	{
+		root = new Node(data);
+		return;
+	}
+	if (root->data > data)
+	{
+		pushInBST(data, root->left);
+	}
+	if (root->data <= data)
+	{
+		pushInBST(data, root->right);
+	}
+}
+
+//дали двоично дърво е двоично наредено дърво
+bool isBST(Node*& root)
+{
+	if (root == nullptr || (root->left == nullptr && root->right == nullptr))
+	{
+		return true;
+	}
+	if (root->left != nullptr && root->left->data >= root->data)
+	{
+		return false;
+	}
+	if (root->right != nullptr && root->right->data < root->data)
+	{
+		return false;
+	}
+
+	if (root->left->data >= root->data || root->right->data < root->data)
+	{
+		return false;
+	}
+
+	return isBST(root->left) && isBST(root->right);
+}
+
+//намира максималната дълбочина на двоично наредено дърво
+unsigned maxDepth(Node*& root)
+{
+	if (root == nullptr || (root->left == nullptr && root->right == nullptr))
+	{
+		return 0;
+	}
+	
+	if (maxDepth(root->left) > maxDepth(root->right))
+	{
+		return maxDepth(root->left) + 1;
+	}
+	else
+	{
+		return maxDepth(root->right) + 1;
+	}
+	
+	//return 1 + max(maxDepth(left), maxDepth(right));
+}
+
+//намира минималната дълбочина на двоично наредено дърво
+unsigned minDepth(Node*& root)
+{
+	if (root == nullptr || (root->left == nullptr && root->right == nullptr))
+	{
+		return 0;
+	}
+
+	if (minDepth(root->left) < minDepth(root->right))
+	{
+		return minDepth(root->left) + 1;
+	}
+	else
+	{
+		return minDepth(root->right) + 1;
+	}
+
+	//return 1 + max(maxDepth(left), maxDepth(right));
+}
+
+//проверява дали двоично наредено дърво е балансирано
+bool isBalanced(Node*& root)
+{
+	if (maxDepth(root) - minDepth(root) <= 1)
+	{
+		return true;
+	}
+	return false;
+}
+
+int main()
+{
+	Node* root = nullptr;
+	pushElement(root, 6, "");
+	pushElement(root, 4, "L");
+	pushElement(root, 3, "LL");
+	pushElement(root, 5, "LR");
+	pushElement(root, 8, "R");
+	pushElement(root, 7, "RL");
+	//pushElement(root, 9, "RR");
+  
+	std::cout << isBST(root) << std::endl;
+
+	std::cout << minDepth(root) << std::endl;
+
+	std::cout << isBalanced(root) << std::endl;
+
+	return 0;
+}

@@ -1,0 +1,127 @@
+#include <iostream>
+#include <string>
+
+struct Node
+{
+	int data;
+	Node* left;
+	Node* right;
+
+	Node(const int& data, Node* left = nullptr, Node* right = nullptr)
+	{
+		this->data = data;
+		this->left = left;
+		this->right = right;
+	}
+};
+
+void pushElement(Node*& root, const int& data, const std::string& path)
+{
+	if (root == nullptr && path == "")
+	{
+		root = new Node(data);
+		return;
+	}
+
+	if (root == nullptr || path == "")
+	{
+		return;
+	}
+
+	unsigned size = path.length() - 1; //13
+	Node* cur = root;
+
+	for (unsigned i = 0; i < size; ++i)
+	{
+		if (path[i] == 'L')
+		{
+			cur = cur->left;
+		}
+		else if (path[i] == 'R')
+		{
+			cur = cur->right;
+		}
+
+		if (cur == nullptr)
+		{
+			return;
+		}
+	}
+
+	if (path[size] == 'L')
+	{
+		cur->left = new Node(data);
+	}
+	else if (path[size] == 'R')
+	{
+		cur->right = new Node(data);
+	}
+}
+
+//сумата от лявото и дясното му дете
+bool checkSum(Node*& root)
+{
+	if (root == nullptr)
+	{
+		return true;
+	}
+	if (root->left == nullptr && root->right != nullptr && root->data != root->right->data)
+	{
+		return false;
+	}
+	else if (root->left != nullptr && root->right == nullptr && root->data != root->left->data)
+	{
+		return false;
+	}
+	else if (root->right != nullptr && root->left != nullptr && root->data != root->left->data + root->right->data)
+	{
+		return false;
+	}
+
+	return checkSum(root->left) && checkSum(root->right);
+}
+
+//сумата от лявото и дясното му поддърво
+unsigned sum(Node*& root)
+{
+	if (root == nullptr)
+	{
+		return 0;
+	}
+
+	return root->data + sum(root->left) + sum(root->right);
+}
+
+bool checkSum2(Node*& root)
+{
+	if (root == nullptr)
+	{
+		return true;
+	}
+	if (root->left == nullptr && root->right == nullptr)
+	{
+		return true;
+	}
+	if (root->data != sum(root->left) + sum(root->right))
+	{
+		return false;
+	}
+
+	return checkSum2(root->left) && checkSum2(root->right);
+}
+
+int main()
+{
+	/*Node* root = nullptr;
+	pushElement(root, 6, "");
+	pushElement(root, 4, "L");
+	pushElement(root, 3, "LL");
+	pushElement(root, 5, "LR");
+	pushElement(root, 8, "R");
+	pushElement(root, 7, "RL");
+	pushElement(root, 9, "RR");
+
+	std::cout << checkSum2(root) << std::endl;
+
+	return 0;
+}

@@ -112,7 +112,7 @@ bool checkSum2(Node*& root)
 
 int main()
 {
-	/*Node* root = nullptr;
+	Node* root = nullptr;
 	pushElement(root, 6, "");
 	pushElement(root, 4, "L");
 	pushElement(root, 3, "LL");

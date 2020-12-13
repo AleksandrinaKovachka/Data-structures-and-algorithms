@@ -1,5 +1,5 @@
 # Седмица 11 - Опашка и Хеш таблици
 
-Опашка
+[Опашка](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/tree/main/Week11/Queue)
 
-Хеш таблици
+[Хеш таблици](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/tree/main/Week11/HashTable)

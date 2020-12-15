@@ -1,5 +1,8 @@
 # Опашка
 
+[Имплементация на опашка с динамичен масив](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/blob/main/Week11/Queue/Queue.h)
+[Имплементация на опашка със свързан списък](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/blob/main/Week11/Queue/QueueList.h)
+
 Теория:
 =
 - FIFO - първи влязъл, първи излязъл
@@ -38,3 +41,4 @@
 Изход: 4 eggs, 1 baking soda, 1/4 white cheese
        Beat eggs, adding baking soda, keep beating and add crumbed (or grated or crushed) cheese
 ```
+[Решение...](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/blob/main/Week11/Queue/Task1)

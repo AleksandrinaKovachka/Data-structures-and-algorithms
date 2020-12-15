@@ -1,6 +1,7 @@
 # Опашка
 
 [Имплементация на опашка с динамичен масив](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/blob/main/Week11/Queue/Queue.h)
+
 [Имплементация на опашка със свързан списък](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/blob/main/Week11/Queue/QueueList.h)
 
 Теория:

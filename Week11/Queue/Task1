@@ -1,0 +1,58 @@
+#include <iostream>
+#include "Queue.h"
+#include <fstream>
+#include <string>
+
+void inputFile()
+{
+	std::string line = "";
+	std::ifstream file("File.txt");
+	Queue<std::string> ingredients;
+	Queue<std::string> instructions;
+
+	if (file.is_open())
+	{
+		while (std::getline(file, line))
+		{
+			if (line[0] >= '0' && line[0] <= '9')
+			{
+				ingredients.pushBack(line);
+			}
+			else
+			{
+				instructions.pushBack(line);
+			}
+		}
+	}
+	else
+	{
+		std::cout << "Unable to open\n";
+	}
+
+	while (ingredients.getSize() != 1)
+	{
+		std::cout << ingredients.front() << ", ";
+		ingredients.popFront();
+	}
+	std::cout << ingredients.front();
+	ingredients.popFront();
+
+	std::cout << std::endl;
+
+	while (instructions.getSize() != 1)
+	{
+		std::cout << instructions.front() << ", ";
+		instructions.popFront();
+	}
+	std::cout << instructions.front();
+	instructions.popFront();
+
+	std::cout << std::endl;
+}
+
+int main()
+{
+	inputFile();
+
+	return 0;
+}

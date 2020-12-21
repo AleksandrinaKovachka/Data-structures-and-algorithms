@@ -1,5 +1,7 @@
 # Седмица 12 - Хеш таблици
 
+[Имплементация на хеш таблица](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/blob/main/Week12/HashMap.h)
+
 Задача 1:
 =
 Да се напише имплементация на шаблонна хеш таблица, която да включва:
@@ -9,6 +11,8 @@
 - метод, който поставя нова стойност в таблицата
 - метод, който премахва елемент от таблицата по подаден ключ
 - метод, който принтира таблицата
+
+[Решение...](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/blob/main/Week12/Task1)
 
 Задача 2:
 =
@@ -28,3 +32,4 @@ b -= 15
 a: 79
 b: 49
 ```
+[Решение...](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/blob/main/Week12/Task2)

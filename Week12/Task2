@@ -1,0 +1,102 @@
+#include <iostream>
+#include <string>
+#include <fstream>
+#include "HashMap.h"
+
+template <typename K>
+struct KeyHash
+{
+	int operator()(const K& key) const //нова хеш функция към задачата
+	{
+		int sum = 0;
+		for (int k = 0; k < key.length(); k++)
+			sum = sum + int(key[k]);
+		return  sum % 256;
+	}
+};
+
+int getNumber(const std::string& stringNumber);
+void inputInTable(const std::string& input, HashMap<std::string, int, KeyHash<std::string>>& hashtable);
+
+void inputFile()
+{
+	std::string line = "";
+	std::ifstream file("File.txt");
+	HashMap<std::string, int, KeyHash<std::string>> hashtable(256);
+
+	if (file.is_open())
+	{
+		while (std::getline(file, line))
+		{
+			inputInTable(line, hashtable);
+		}
+	}
+	else
+	{
+		std::cout << "Unable to open\n";
+	}
+
+	file.close();
+	hashtable.printHashTable();
+}
+
+void inputInTable(const std::string& input, HashMap<std::string, int, KeyHash<std::string>>& hashtable)
+{
+	unsigned size = input.length();
+	std::string name = "";
+	std::string stringNumber = "";
+	int number = 0;
+
+	for (unsigned i = 0; i < size; ++i)
+	{
+		if (input[i] != ' ')
+		{
+			name += input[i];
+		}
+		else
+		{
+			if (input[i + 1] == '=')
+			{
+				stringNumber = input.substr(i + 3, size - (i + 3));
+				number = getNumber(stringNumber);
+				hashtable.putAndUpdate(name, number);
+				break;
+			}
+			else if (input[i + 1] == '+')
+			{
+				stringNumber = input.substr(i + 4, size - (i + 4));
+				number = getNumber(stringNumber);
+
+				int value = hashtable.getValue(name);
+				hashtable.putAndUpdate(name, value + number);
+				break;
+			}
+			else if (input[i + 1] == '-')
+			{
+				stringNumber = input.substr(i + 4, size - (i + 4));
+				number = getNumber(stringNumber);
+
+				int value = hashtable.getValue(name);
+				hashtable.putAndUpdate(name, value - number);
+				break;
+			}
+		}
+	}
+}
+
+int getNumber(const std::string& stringNumber)
+{
+	int number = 0;
+	unsigned size = stringNumber.length();
+	for (unsigned i = 0; i < size; ++i)
+	{
+		number = (number * 10) + stringNumber[i] - '0';
+	}
+}
+
+int main()
+{
+	inputFile();
+
+	return 0;
+}

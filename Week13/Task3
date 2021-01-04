@@ -1,0 +1,74 @@
+#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <stack>
+#include <queue>
+
+int main()
+{
+	//apple, 10
+	//eggs, 1
+	std::unordered_map<std::string, unsigned> products;
+	products["apple"] = 10;
+	products["eggs"] = 1;
+
+	std::stack<std::string> st1;
+	st1.push("apple");
+
+	std::stack<std::string> st2;
+	st2.push("apple");
+	st2.push("eggs");
+
+	std::stack<std::string> st3;
+	st3.push("apple");
+	st3.push("eggs");
+
+	//client1[apple]
+	//client2[apple, eggs]
+	//client2[apple, eggs]
+	std::unordered_map<std::string, std::stack<std::string>> clients;
+	clients["client1"] = st1;
+	clients["client2"] = st2;
+	clients["client3"] = st3;
+
+	std::queue<std::string> market;
+	market.push("client1");
+	market.push("client2");
+	market.push("client3");
+
+	std::string name = "";
+	std::stack<std::string> cl;
+	std::string nameOfProduct = "";
+	int count = 0;
+	while (!market.empty())
+	{
+		name = market.front();
+		market.pop();
+
+		cl = clients[name];
+
+		while (!cl.empty())
+		{
+			nameOfProduct = cl.top();
+			cl.pop();
+
+			count = products[nameOfProduct];
+			if (count > 0)
+			{
+				std::cout << "Buy " << nameOfProduct << std::endl;
+				products[nameOfProduct] = count - 1;
+			}
+			else
+			{
+				std::cout << "No product\n";
+			}
+		}
+	}
+
+	for (std::unordered_map<std::string, unsigned>::iterator it = products.begin(); it != products.end(); it++)
+	{
+		std::cout << "(" << it->first << ", " << it->second << ")\n";
+	}
+
+	return 0;
+}

@@ -1,0 +1,38 @@
+#include <iostream>
+#include <string>
+
+void createHashMap(const std::string& text)
+{
+	std::unordered_map<std::string, unsigned> hashmap;
+
+	std::string word = "";
+	unsigned size = text.length();
+
+	for (unsigned i = 0; i < size; ++i)
+	{
+		if (text[i] != ' ')
+		{
+			word += text[i];
+		}
+		else
+		{
+			hashmap[word]++;
+			word = "";
+		}
+	}
+	hashmap[word]++;
+
+	for (std::unordered_map<std::string, unsigned>::iterator it = hashmap.begin(); it != hashmap.end(); it++)
+	{
+		std::cout << "(" << it->first << ", " << it->second << ")\n";
+	}
+}
+
+int main()
+{
+	std::string text = "The Hashtable class class implements a hash table hash table";
+
+	createHashMap(text);
+
+	return 0;
+}

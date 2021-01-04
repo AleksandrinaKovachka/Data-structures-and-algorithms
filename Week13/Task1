@@ -1,0 +1,88 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include "HashMap.h"
+
+void inputInHashTable(const std::string& line, HashMap<std::string, std::string, KeyHash<std::string>>& hashmap);
+void inputFile(HashMap<std::string, std::string, KeyHash<std::string>>& hashmap)
+{
+	std::fstream file("File.txt");
+	std::string line = "";
+
+	if (file.is_open())
+	{
+		while (std::getline(file, line))
+		{
+			inputInHashTable(line, hashmap);
+		}
+	}
+	else
+	{
+		std::cout << "Unable to open\n";
+	}
+
+	file.close();
+	//hashmap.printHashTable();
+}
+
+void inputInHashTable(const std::string& line, HashMap<std::string, std::string, KeyHash<std::string>>& hashmap)
+{
+	unsigned size = line.length();
+	std::string name = "";
+	std::string message = "";
+
+	for (unsigned i = 0; i < size; ++i)
+	{
+		if (line[i] != ',')
+		{
+			name += line[i];
+		}
+		else
+		{
+			message = line.substr(i + 2, size - (i + 2));
+			break;
+		}
+	}
+
+	hashmap.putAndUpdate(name, message);
+}
+
+void printOrGet(HashMap<std::string, std::string, KeyHash<std::string>>& hashmap)
+{
+	std::string name = "";
+	std::string message = "";
+	int input;
+
+	while (true)
+	{
+		std::cout << "What do you want: ";
+		std::cin >> input;
+		if (input == 1)
+		{
+			std::cin >> name;
+			std::cin >> message;
+			hashmap.putAndUpdate(name, message);
+		}
+		else if (input == 2)
+		{
+			std::cin >> name;
+
+			std::cout << hashmap.getValue(name) << std::endl;
+		}
+		else if (input == 0)
+		{
+			break;
+		}
+	}
+}
+
+int main()
+{
+	HashMap<std::string, std::string, KeyHash<std::string>> hashmap(256);
+
+	inputFile(hashmap);
+
+	printOrGet(hashmap);
+
+	return 0;
+}

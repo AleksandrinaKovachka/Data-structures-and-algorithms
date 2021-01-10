@@ -28,3 +28,5 @@
 [Седмица 12](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/tree/main/Week12)
 
 [Седмица 13](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/tree/main/Week13)
+
+[Седмица 14](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/tree/main/Week14)

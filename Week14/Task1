@@ -1,0 +1,72 @@
+#include <iostream>
+#include <unordered_map>
+
+struct TrieNode
+{
+	bool empty;
+	std::unordered_map<char, TrieNode*> children = {};
+
+	TrieNode()
+	{
+		empty = false;
+	}
+};
+
+void addWord(const std::string& word, TrieNode*& root)
+{
+	TrieNode* cur = root;
+
+	unsigned size = word.length();
+	char w;
+
+	for (unsigned i = 0; i < size; ++i)
+	{
+		w = word[i];
+		TrieNode* node = cur->children[w];
+
+		if (node == nullptr)
+		{
+			node = new TrieNode();
+			cur->children[w] = node;
+		}
+
+		cur = node;
+	}
+
+	cur->empty = true;
+}
+
+bool haveWord(const std::string& word, TrieNode*& root)
+{
+	TrieNode* cur = root;
+
+	unsigned size = word.length();
+	char w;
+
+	for (unsigned i = 0; i < size; ++i)
+	{
+		w = word[i];
+		TrieNode* node = cur->children[w];
+		if (node == nullptr)
+		{
+			return false;
+		}
+		if (node->empty != true && i == size - 1)
+		{
+			return false;
+		}
+		cur = node;
+	}
+
+	return true;
+}
+
+int main() 
+{
+	TrieNode* root = new TrieNode();
+	addWord("hello", root);
+
+	std::cout << haveWord("hello", root) << std::endl;
+
+	return 0;
+}

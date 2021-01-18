@@ -1,0 +1,237 @@
+#include <iostream>
+#include <list>
+#include <queue>
+#include <string>
+
+template<typename T>
+struct Node
+{
+	T data;
+	int id;
+
+	Node(const T& data, const int& id)
+	{
+		this->data = data;
+		this->id = id;
+	}
+
+	bool operator==(const Node<T>& rhs) const
+	{
+		return this->id == rhs.id && this->data == rhs.data;
+	}
+};
+
+template<typename T>
+class Graph
+{
+private:
+	std::list<Node<T>> *graphAdj;
+	unsigned size;
+	unsigned currentId;
+
+public:
+	Graph(const unsigned& size)
+	{
+		this->size = size;
+		this->currentId = 0;
+
+		this->graphAdj = new std::list<Node<T>>[size];
+	}
+
+	~Graph()
+	{
+		delete[] graphAdj;
+	}
+
+	void addNode(const T& data)
+	{
+		Node<T> newNode(data, currentId);
+		graphAdj[currentId].push_back(newNode);
+		currentId++;
+	}
+
+	void addEdge(const Node<T>& src, const Node<T>& dst)
+	{
+		graphAdj[src.id].push_back(dst);
+	}
+
+	void BFS(const Node<T>& start)
+	{
+		bool* visited = new bool[size];
+
+		for (unsigned i = 0; i < size; ++i)
+		{
+			visited[i] = false;
+		}
+
+		std::queue<Node<T>> q;
+		q.push(start);
+		visited[start.id] = true;
+
+		while (!q.empty())
+		{
+			Node<T> node = q.front();
+			q.pop();
+
+			std::cout << node.data << std::endl;
+
+			for (typename std::list<Node<T>>::iterator it = graphAdj[node.id].begin(); it != graphAdj[node.id].end(); ++it)
+			{
+				if (!visited[it->id])
+				{
+					visited[it->id] = true;
+					q.push(*it);
+				}
+			}
+		}
+
+		delete[] visited;
+	}
+
+	void DFS(const Node<T>& start)
+	{
+		bool* visited = new bool[size];
+
+		for (unsigned i = 0; i < size; ++i)
+		{
+			visited[i] = false;
+		}
+
+		helpDFS(start, visited);
+
+		delete[] visited;
+	}
+
+	void helpDFS(const Node<T>& cur, bool* visited)
+	{
+		std::cout << cur.data << std::endl;
+		visited[cur.id] = true;
+
+		for (typename std::list<Node<T>>::iterator it = graphAdj[cur.id].begin(); it != graphAdj[cur.id].end(); ++it)
+		{
+			if (!visited[it->id])
+			{
+				visited[it->id] = true;
+
+				helpDFS(*it, visited);
+			}
+		}
+	}
+
+	bool hasPath(const Node<T>& from, const Node<T> where)
+	{
+		bool* visited = new bool[size];
+
+		for (unsigned i = 0; i < size; ++i)
+		{
+			visited[i] = false;
+		}
+
+		std::queue<Node<T>> q;
+		q.push(from);
+		visited[from.id] = true;
+
+		while (!q.empty())
+		{
+			Node<T> node = q.front();
+			q.pop();
+
+			for (typename std::list<Node<T>>::iterator it = graphAdj[node.id].begin(); it != graphAdj[node.id].end(); ++it)
+			{
+				if (*it == where)
+				{
+					return true;
+				}
+
+				if (!visited[it->id])
+				{
+					visited[it->id] = true;
+					q.push(*it);
+				}
+			}
+		}
+
+		delete[] visited;
+
+		return false;
+	}
+
+	void findPath(const Node<T>& from, const Node<T>& where)
+	{
+		std::queue<std::vector<Node<T>>> q;
+
+		std::vector<Node<T>> path;
+		path.push_back(from);
+		q.push(path);
+
+		while (!q.empty())
+		{
+			path = q.front();
+			q.pop();
+
+			Node<T> node = path[path.size() - 1];
+
+			if (node == where)
+			{
+				unsigned size = path.size();
+				for (unsigned i = 0; i < size; ++i)
+				{
+					std::cout << path[i].data << " ";
+				}
+				std::cout << std::endl;
+			}
+
+			for (typename std::list<Node<T>>::iterator it = graphAdj[node.id].begin(); it != graphAdj[node.id].end(); ++it)
+			{
+				if (isNotVisited(*it, path))
+				{
+					std::vector<Node<T>> newPath(path);
+					newPath.push_back(*it);
+					q.push(newPath);
+				}
+			}
+		}
+	}
+
+	bool isNotVisited(const Node<T>& node, const std::vector<Node<T>>& path)
+	{
+		unsigned size = path.size();
+		for (unsigned i = 0; i < size; ++i)
+		{
+			if (path[i] == node)
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+};
+
+int main()
+{
+	Graph<std::string> graph(4);
+
+	graph.addNode("zero");
+	graph.addNode("one");
+	graph.addNode("two");
+	graph.addNode("three");
+
+	Node<std::string> t0("zero", 0), t1("one", 1), t2("two", 2), t3("three", 3);
+	graph.addEdge(t0, t1);
+	graph.addEdge(t0, t2);
+	graph.addEdge(t1, t2);
+	graph.addEdge(t2, t0);
+	graph.addEdge(t2, t3);
+	graph.addEdge(t3, t3);
+
+	graph.BFS(t0);
+
+	graph.DFS(t0);
+
+	std::cout << graph.hasPath(t3, t1) << std::endl;
+
+	graph.findPath(t0, t3);
+
+	return 0;
+}

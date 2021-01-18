@@ -10,3 +10,5 @@
   - търсене в дълбочина
 - търсене дали съществува път
 - извеждане на всички възможни пътища по подадено начало и желан край
+
+[Решение...](https://github.com/AleksandrinaKovachka/Data-structures-and-algorithms/blob/main/Week15/Tasks)
